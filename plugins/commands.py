@@ -138,7 +138,7 @@ async def back(bot, query):
 @Client.on_callback_query(filters.regex(r'^about'))
 async def about(bot, query):
     await query.message.edit_text(
-        text=Script.ABOUT_TXT.format(my_name='Public Forward',python_version=python_version(),pyrogram_version=pyrogram_version,mongodb_version=await mongodb_version()),
+        text=Script.ABOUT_TXT,
         reply_markup=InlineKeyboardMarkup(
             [[
             InlineKeyboardButton('🕷 ᴄᴏᴅᴇ ᴀʀᴛɪꜱᴀɴ', url='https://t.me/Anmol0700'),
