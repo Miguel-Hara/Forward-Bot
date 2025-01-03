@@ -147,9 +147,8 @@ async def about(bot, query):
             InlineKeyboardButton('↩ ʙᴀᴄᴋ', callback_data='back')
             ]]
         ),
-        disable_web_page_preview=True,
-        parse_mode=enums.ParseMode.HTML,
-                    )
+        disable_web_page_preview=True
+    )
 # Don't Remove Credit Tg - @VJ_Botz
 # Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
 # Ask Doubt on telegram @KingVJ01
