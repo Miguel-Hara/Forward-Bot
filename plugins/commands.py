@@ -144,7 +144,8 @@ async def about(bot, query):
             InlineKeyboardButton('🕷 ᴄᴏᴅᴇ ᴀʀᴛɪꜱᴀɴ', url='https://t.me/Anmol0700'),
             InlineKeyboardButton('👀 ꜱᴏᴜʀᴄᴇ ᴄᴏᴅᴇ', url='https://te.legra.ph/file/fecf4e578f159374f33c4.mp4')
             ],[
-            InlineKeyboardButton('↩ ʙᴀᴄᴋ', callback_data='back')
+            InlineKeyboardButton('↩ ʙᴀᴄᴋ', callback_data='back'),
+            InlineKeyboardButton('Stats ✨️', callback_data='status')
             ]]
         ),
         disable_web_page_preview=True
