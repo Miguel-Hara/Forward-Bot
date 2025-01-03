@@ -21,18 +21,21 @@ START_TIME = time.time()
 # Ask Doubt on telegram @KingVJ01
 
 main_buttons = [[
-    InlineKeyboardButton('❣️ ᴅᴇᴠᴇʟᴏᴘᴇʀ ❣️', url='https://t.me/kingvj01')
-],[
-    InlineKeyboardButton('🔍 sᴜᴘᴘᴏʀᴛ ɢʀᴏᴜᴘ', url='https://t.me/vj_bot_disscussion'),
-    InlineKeyboardButton('🤖 ᴜᴘᴅᴀᴛᴇ ᴄʜᴀɴɴᴇʟ', url='https://t.me/vj_botz')
-],[
-    InlineKeyboardButton('💝 sᴜʙsᴄʀɪʙᴇ ᴍʏ ʏᴏᴜᴛᴜʙᴇ ᴄʜᴀɴɴᴇʟ', url='https://youtube.com/@Tech_VJ')
-],[
-    InlineKeyboardButton('👨‍💻 ʜᴇʟᴘ', callback_data='help'),
-    InlineKeyboardButton('💁 ᴀʙᴏᴜᴛ', callback_data='about')
-],[
-    InlineKeyboardButton('⚙ sᴇᴛᴛɪɴɢs', callback_data='settings#main')
-]]
+        InlineKeyboardButton('🕷 ᴄᴏᴅᴇ ᴀʀᴛɪꜱᴀɴ', url='https://t.me/Anmol0700')
+        ],[
+        InlineKeyboardButton('👨‍💻 ꜱᴜᴘᴘᴏʀᴛ ɢʀᴏᴜᴘ', url='https://t.me/Movies_Samrajya'),
+        InlineKeyboardButton('🔄 ᴜᴘᴅᴀᴛᴇ ᴄʜᴀɴɴᴇʟ', url='https://t.me/Film_Nest')
+        ],[
+        InlineKeyboardButton('🆘 ʜᴇʟᴘ', callback_data='help'),
+        InlineKeyboardButton('ℹ️ ᴀʙᴏᴜᴛ', callback_data='about')
+        ],[
+        InlineKeyboardButton('⚙️ ꜱᴇᴛᴛɪɴɢꜱ', callback_data='settings#main')
+        ]]
+
+buttons = [[
+        InlineKeyboardButton('🕸 ᴄᴏᴅᴇ ᴀʀᴛɪꜱᴀɴ', url='https://t.me/Anmol0700'),
+        InlineKeyboardButton('👀 ꜱᴏᴜʀᴄᴇ ᴄᴏᴅᴇ', url='https://te.legra.ph/file/fecf4e578f159374f33c4.mp4')
+        ]]
 
 # Don't Remove Credit Tg - @VJ_Botz
 # Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
@@ -41,13 +44,26 @@ main_buttons = [[
 @Client.on_message(filters.private & filters.command(['start']))
 async def start(client, message):
     user = message.from_user
+    
+    # Check for force subscription
+    Fsub = await ForceSub(client, message)
+    if Fsub == 400:
+        return
+    
+    # Fetch the picture from the provided URL
+    picture_url = "https://te.legra.ph/file/1f2ac2fe8cdf202799847.jpg"
+    
+    # Send the picture with the start message
+    await client.send_photo(
+        chat_id=message.chat.id,
+        photo=picture_url,
+        caption=Script.START_TXT.format(message.from_user.first_name),
+        reply_markup=InlineKeyboardMarkup(main_buttons)
+    )
+    
+    # Check if the user exists in the database and add if not
     if not await db.is_user_exist(user.id):
         await db.add_user(user.id, user.first_name)
-    reply_markup = InlineKeyboardMarkup(main_buttons)
-    await client.send_message(
-        chat_id=message.chat.id,
-        reply_markup=reply_markup,
-        text=Script.START_TXT.format(message.from_user.first_name))
 
 # Don't Remove Credit Tg - @VJ_Botz
 # Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
@@ -60,18 +76,30 @@ async def restart(client, message):
     await msg.edit("<i>Server restarted successfully ✅</i>")
     system("git pull -f && pip3 install --no-cache-dir -r requirements.txt")
     execle(sys.executable, sys.executable, "main.py", environ)
-
-# Don't Remove Credit Tg - @VJ_Botz
-# Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
-# Ask Doubt on telegram @KingVJ01
+    
+@Client.on_message(filters.command('help'))
+async def help(client, message):
+    user = message.from_user
+    if not await db.is_user_exist(user.id):
+        await db.add_user(user.id, user.first_name)
+    
+    # Fetch the picture from the provided URL
+    picture_url = "https://te.legra.ph/file/1f2ac2fe8cdf202799847.jpg"
+    
+    # Send the picture along with the help message
+    await message.reply_photo(
+        photo=picture_url,
+        caption=Script.HELP_TXT.format(message.from_user.first_name),
+        reply_markup=InlineKeyboardMarkup(buttons)
+    )
 
 @Client.on_callback_query(filters.regex(r'^help'))
 async def helpcb(bot, query):
     buttons = [[
-        InlineKeyboardButton('🤔 ʜᴏᴡ ᴛᴏ ᴜsᴇ ᴍᴇ ❓', callback_data='how_to_use')
+        InlineKeyboardButton('ʜᴏᴡ ᴛᴏ ᴜsᴇ ᴍᴇ ❓', callback_data='how_to_use')
     ],[
         InlineKeyboardButton('Aʙᴏᴜᴛ ✨️', callback_data='about'),
-        InlineKeyboardButton('⚙ Sᴇᴛᴛɪɴɢs', callback_data='settings#main')
+        InlineKeyboardButton('⚙️ sᴇᴛᴛɪɴɢs ', callback_data='settings#main')
     ],[
         InlineKeyboardButton('• back', callback_data='back')
     ]]
@@ -109,17 +137,19 @@ async def back(bot, query):
 
 @Client.on_callback_query(filters.regex(r'^about'))
 async def about(bot, query):
-    buttons = [[
-         InlineKeyboardButton('• back', callback_data='help'),
-         InlineKeyboardButton('Stats ✨️', callback_data='status')
-    ]]
-    reply_markup = InlineKeyboardMarkup(buttons)
     await query.message.edit_text(
-        text=Script.ABOUT_TXT,
-        reply_markup=reply_markup,
-        disable_web_page_preview=True
-    )
-
+        text=Script.ABOUT_TXT.format(my_name='Public Forward',python_version=python_version(),pyrogram_version=pyrogram_version,mongodb_version=await mongodb_version()),
+        reply_markup=InlineKeyboardMarkup(
+            [[
+            InlineKeyboardButton('🕷 ᴄᴏᴅᴇ ᴀʀᴛɪꜱᴀɴ', url='https://t.me/Anmol0700'),
+            InlineKeyboardButton('👀 ꜱᴏᴜʀᴄᴇ ᴄᴏᴅᴇ', url='https://te.legra.ph/file/fecf4e578f159374f33c4.mp4')
+            ],[
+            InlineKeyboardButton('↩ ʙᴀᴄᴋ', callback_data='back')
+            ]]
+        ),
+        disable_web_page_preview=True,
+        parse_mode=enums.ParseMode.HTML,
+                    )
 # Don't Remove Credit Tg - @VJ_Botz
 # Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
 # Ask Doubt on telegram @KingVJ01
